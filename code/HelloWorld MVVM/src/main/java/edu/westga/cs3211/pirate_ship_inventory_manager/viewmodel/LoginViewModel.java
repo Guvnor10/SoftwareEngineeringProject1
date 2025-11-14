@@ -1,6 +1,6 @@
 package edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel;
 
-import edu.westga.cs3211.pirate_ship_inventory_manager.model.Person;
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
  * @version Fall 2025
  */
 
-public class GreetingViewModel {
+public class LoginViewModel {
 
 	private StringProperty greetingProperty;
 	private StringProperty nameProperty;
@@ -20,7 +20,7 @@ public class GreetingViewModel {
 	/**
 	 * Instantiates a new greeting view model.
 	 */
-	public GreetingViewModel() {
+	public LoginViewModel() {
 		// this will set the CodeBehind's greetingLabel to Hello, World!
 		// because
 		// this.greetingLabel.textProperty().bind(this.viewModel.greetingProperty());
@@ -72,16 +72,17 @@ public class GreetingViewModel {
 	public void sayGreeting() {
 
 		String name = this.nameProperty.getValue();
-		if (!name.isEmpty()) {
-			Person person = new Person(name);
-			this.greetingProperty.setValue("Hello! " + person.getName());
+	    if (!name.isEmpty()) {
+	    	
+	        this.greetingProperty.setValue("Hello! " + name);
 
-			if (this.allNamesProperty.getValue().isEmpty()) {
-				this.allNamesProperty.setValue(name);
-			} else {
-				this.allNamesProperty.setValue(this.allNamesProperty.getValue() 
-						+ System.lineSeparator() + name);
-			}
+	        if (this.allNamesProperty.getValue().isEmpty()) {
+	            this.allNamesProperty.setValue(name);
+	        } else {
+	            this.allNamesProperty.setValue(
+	                this.allNamesProperty.getValue() + System.lineSeparator() + name
+	            );
+	        }
 			// this sets the viewModel's nameProperty to empty
 			// since it's bi-directionally bound to the codebehind's
 			// nameTextField.textProperty
