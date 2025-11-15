@@ -6,16 +6,28 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents one type of stock item in the ship's inventory.
  */
 public class Stock {
 
+	/** The name. */
 	private String name;
+	
+	/** The quantity. */
 	private int quantity;
+	
+	/** The size. */
 	private double size;
+	
+	/** The attributes. */
 	private Set<StockAttributes> attributes;
+	
+	/** The condition. */
 	private String condition;
+	
+	/** The expiration date. */
 	private LocalDate expirationDate;
 
 	/**
@@ -55,45 +67,92 @@ public class Stock {
 		this.expirationDate = expirationDate;
 	}
 
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * Gets the quantity.
+	 *
+	 * @return the quantity
+	 */
 	public int getQuantity() {
 		return this.quantity;
 	}
 
+	/**
+	 * Gets the size.
+	 *
+	 * @return the size
+	 */
 	public double getSize() {
 		return this.size;
 	}
 
 	/**
 	 * Returns an unmodifiable view of the attributes.
+	 *
+	 * @return the attributes
 	 */
 	public Set<StockAttributes> getAttributes() {
 		return Collections.unmodifiableSet(this.attributes);
 	}
 
+	/**
+	 * Gets the condition.
+	 *
+	 * @return the condition
+	 */
 	public String getCondition() {
 		return this.condition;
 	}
 
+	/**
+	 * Gets the expiration date.
+	 *
+	 * @return the expiration date
+	 */
 	public LocalDate getExpirationDate() {
 		return this.expirationDate;
 	}
 
+	/**
+	 * Checks if is flammable.
+	 *
+	 * @return true, if is flammable
+	 */
 	public boolean isFlammable() {
 		return this.attributes.contains(StockAttributes.FLAMMABLE);
 	}
 
+	/**
+	 * Checks if is perishable.
+	 *
+	 * @return true, if is perishable
+	 */
 	public boolean isPerishable() {
 		return this.attributes.contains(StockAttributes.PERISHABLE);
 	}
-
+	
+	/**
+	 * Checks if is liquid.
+	 *
+	 * @return true, if is liquid
+	 */
 	public boolean isLiquid() {
 		return this.attributes.contains(StockAttributes.LIQUID);
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		return "Stock{name='" + this.name + '\'' + ", quantity=" + this.quantity + ", size=" + this.size
@@ -101,6 +160,12 @@ public class Stock {
 				+ this.expirationDate + '}';
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param other the other
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Stock)) {
@@ -113,6 +178,11 @@ public class Stock {
 				&& Objects.equals(this.expirationDate, that.expirationDate);
 	}
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.name, this.quantity, this.size, this.attributes, this.condition, this.expirationDate);

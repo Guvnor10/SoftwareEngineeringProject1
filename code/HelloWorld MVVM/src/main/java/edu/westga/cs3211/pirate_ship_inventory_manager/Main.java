@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
  * @version Fall 2025
  */
 public class Main extends Application {
-
+	
 	private static final String WINDOW_TITLE = "Greetings";
 	private static final String GUI_FXML = "view/LoginPage.fxml";
 

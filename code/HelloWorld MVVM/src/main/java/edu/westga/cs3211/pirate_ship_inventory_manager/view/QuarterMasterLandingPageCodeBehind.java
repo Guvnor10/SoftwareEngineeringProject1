@@ -3,6 +3,9 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.view;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
+import edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel.LoginViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,12 +37,12 @@ public class QuarterMasterLandingPageCodeBehind {
 
     @FXML
     void goToAddStockLanding(ActionEvent event) throws IOException {
-    	AddStockChangesPageCodeBehind.setLastRole("QUARTERMASTER");
+    	LoginViewModel.setLoggedInRole(Roles.QUARTERMASTER);
     	Parent root = FXMLLoader.load(
     	        getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/AddStockChangesPage.fxml")
     	    );
 
-    	    Stage stage = (Stage) addStockChangesButton.getScene().getWindow();
+    	    Stage stage = (Stage) this.addStockChangesButton.getScene().getWindow();
     	    Scene scene = new Scene(root);
     	    stage.setScene(scene);
     	    stage.show();
@@ -51,7 +54,7 @@ public class QuarterMasterLandingPageCodeBehind {
     	        getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/ViewStockChangesPage.fxml")
     	    );
 
-    	    Stage stage = (Stage) addStockChangesButton.getScene().getWindow();
+    	    Stage stage = (Stage) this.addStockChangesButton.getScene().getWindow();
     	    Scene scene = new Scene(root);
     	    stage.setScene(scene);
     	    stage.show();
@@ -59,7 +62,7 @@ public class QuarterMasterLandingPageCodeBehind {
     
     @FXML
     void backToLoginPage(ActionEvent event) throws IOException {
-    	Stage stage = (Stage) logoutButton.getScene().getWindow();
+    	Stage stage = (Stage) this.logoutButton.getScene().getWindow();
 
         Parent root = FXMLLoader.load(getClass().getResource(
             "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"
@@ -71,9 +74,9 @@ public class QuarterMasterLandingPageCodeBehind {
 
     @FXML
     void initialize() {
-        assert addStockChangesButton != null : "fx:id=\"addStockChangesButton\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
-        assert greetingLabel != null : "fx:id=\"greetingLabel\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
-        assert viewStockChangesButton != null : "fx:id=\"viewStockChangesButton\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
+        assert this.addStockChangesButton != null : "fx:id=\"addStockChangesButton\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
+        assert this.greetingLabel != null : "fx:id=\"greetingLabel\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
+        assert this.viewStockChangesButton != null : "fx:id=\"viewStockChangesButton\" was not injected: check your FXML file 'QuarterMasterLandingPage.fxml'.";
 
     }
 

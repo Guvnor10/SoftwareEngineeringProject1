@@ -3,6 +3,9 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.view;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
+import edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel.LoginViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +34,7 @@ public class CrewmateLandingPageCodeBehind {
 
     @FXML
     void addStockChanges(ActionEvent event) throws IOException {
-    	AddStockChangesPageCodeBehind.setLastRole("CREWMATE");
+    	LoginViewModel.setLoggedInRole(Roles.CREWMATE);
     	
         Parent root = FXMLLoader.load(getClass().getResource(
             "/edu/westga/cs3211/pirate_ship_inventory_manager/view/AddStockChangesPage.fxml"

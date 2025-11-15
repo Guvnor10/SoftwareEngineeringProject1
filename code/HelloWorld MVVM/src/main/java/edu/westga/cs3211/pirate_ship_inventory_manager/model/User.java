@@ -1,8 +1,5 @@
 package edu.westga.cs3211.pirate_ship_inventory_manager.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // TODO: Auto-generated Javadoc
 /**
  * Defines a person.
@@ -22,9 +19,10 @@ public class User {
 
 	/**
 	 * Instantiates a new users.
-	 *
-	 * @param role the role
-	 * @param name the name
+	 * 
+	 * @param username the name
+	 * @param role     the role
+	 * @param password the password
 	 */
 	public User(String username, String password, Roles role) {
 		if (username == null || username.isEmpty()) {
@@ -48,7 +46,7 @@ public class User {
 	 * @return the role
 	 */
 	public Roles getRole() {
-		return role;
+		return this.role;
 	}
 
 	/**
@@ -66,24 +64,34 @@ public class User {
 	 * @return the name
 	 */
 	public String getUserName() {
-		return username;
+		return this.username;
 	}
 
 	/**
 	 * Sets the name.
 	 *
-	 * @param name the new name
+	 * @param username the new name
 	 */
 	public void setUserName(String username) {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
+	/**
+	 * Gets the password
+	 *
+	 * @param password the new password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * Gets the password
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
+		return this.password;
 	}
 
 }

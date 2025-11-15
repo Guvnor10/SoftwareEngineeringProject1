@@ -2,141 +2,278 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.view;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import edu.westga.cs3211.pirate_ship_inventory_manager.model.Inventory;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Stock;
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.StockAttributes;
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.StockChangeEntry;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-/**
- * Code-behind for the View Stock Changes page.
- * Quartermasters use this to see all stock in the inventory.
- */
 public class ViewStockChangesPageCodeBehind {
 
-    @FXML
-    private Button homeButton;
+	// ========= UI FIELDS =========
 
-    @FXML
-    private Button logoutButton;
+	@FXML
+	private Button homeButton;
+	@FXML
+	private Button logoutButton;
+	@FXML
+	private Button applyFiltersButton;
+	@FXML
+	private Button clearFiltersButton;
+	@FXML
+	private Button refreshButton;
 
-    @FXML
-    private Button refreshButton;
+	@FXML
+	private Label statusLabel;
 
-    @FXML
-    private Label statusLabel;
+	// Table + columns
+	@FXML
+	private TableView<StockChangeEntry> stockTableView;
 
-    @FXML
-    private TableView<Stock> stockTableView;
+	@FXML
+	private TableColumn<StockChangeEntry, String> itemNameColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, Integer> quantityColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, Double> sizeColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, String> attributesColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, String> conditionColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, LocalDate> expirationDateColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, String> compartmentColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, String> addedByColumn;
+	@FXML
+	private TableColumn<StockChangeEntry, LocalDateTime> timeAddedColumn;
 
-    @FXML
-    private TableColumn<Stock, String> nameColumn;
+	// Filters
+	@FXML
+	private CheckBox flammableFilterCheckBox;
+	@FXML
+	private CheckBox perishableFilterCheckBox;
+	@FXML
+	private CheckBox liquidFilterCheckBox;
 
-    @FXML
-    private TableColumn<Stock, Integer> quantityColumn;
+	@FXML
+	private ComboBox<String> crewMateFilterComboBox;
 
-    @FXML
-    private TableColumn<Stock, Double> sizeColumn;
+	@FXML
+	private DatePicker startDatePicker;
+	@FXML
+	private DatePicker endDatePicker;
 
-    @FXML
-    private TableColumn<Stock, String> attributesColumn;
+	// ========= INITIALIZE =========
 
-    @FXML
-    private TableColumn<Stock, String> conditionColumn;
+	@FXML
+	private void initialize() {
+		this.configureTableColumns();
+		this.populateCrewMateFilterOptions();
+		this.refreshTableFromLog();
+		this.statusLabel.setText("");
+	}
 
-    @FXML
-    private TableColumn<Stock, LocalDate> expirationDateColumn;
+	// ========= TABLE SETUP =========
+	@FXML
+	private void configureTableColumns() {
+		// For easier reading
+		this.itemNameColumn.setCellValueFactory(cell -> {
+			Stock stock = cell.getValue().getStock();
+			return new SimpleStringProperty(stock.getName());
+		});
 
-    @FXML
-    private void initialize() {
-        // Basic fx:id checks
-        assert this.stockTableView != null : "fx:id=\"stockTableView\" was not injected: check your FXML file 'ViewStockChangesPage.fxml'.";
-        assert this.nameColumn != null : "fx:id=\"nameColumn\" was not injected.";
-        assert this.quantityColumn != null : "fx:id=\"quantityColumn\" was not injected.";
-        assert this.sizeColumn != null : "fx:id=\"sizeColumn\" was not injected.";
-        assert this.attributesColumn != null : "fx:id=\"attributesColumn\" was not injected.";
-        assert this.conditionColumn != null : "fx:id=\"conditionColumn\" was not injected.";
-        assert this.expirationDateColumn != null : "fx:id=\"expirationDateColumn\" was not injected.";
+		this.quantityColumn.setCellValueFactory(cell -> {
+			Stock stock = cell.getValue().getStock();
+			return new SimpleIntegerProperty(stock.getQuantity()).asObject();
+		});
 
-        // Bind columns to Stock properties
-        this.nameColumn.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getName()));
+		this.sizeColumn.setCellValueFactory(cell -> {
+			Stock stock = cell.getValue().getStock();
+			return new SimpleDoubleProperty(stock.getSize()).asObject();
+		});
 
-        this.quantityColumn.setCellValueFactory(cellData -> 
-            new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());
+		this.attributesColumn.setCellValueFactory(cell -> {
+			Set<StockAttributes> attrs = cell.getValue().getStock().getAttributes();
+			return new SimpleStringProperty(attrs.toString());
+		});
 
-        this.sizeColumn.setCellValueFactory(cellData -> 
-            new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getSize()).asObject());
+		this.conditionColumn.setCellValueFactory(cell -> {
+			Stock stock = cell.getValue().getStock();
+			return new SimpleStringProperty(stock.getCondition());
+		});
 
-        this.attributesColumn.setCellValueFactory(cellData -> {
-            String attrs = cellData.getValue().getAttributes()
-                    .stream()
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
-            return new SimpleStringProperty(attrs);
-        });
+		this.expirationDateColumn.setCellValueFactory(cell -> {
+			Stock stock = cell.getValue().getStock();
+			return new SimpleObjectProperty<>(stock.getExpirationDate());
+		});
 
-        this.conditionColumn.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getCondition()));
+		this.compartmentColumn.setCellValueFactory(cell -> {
+			String compText = cell.getValue().getCompartment().toString();
+			return new SimpleStringProperty(compText);
+		});
 
-        this.expirationDateColumn.setCellValueFactory(cellData -> 
-            new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getExpirationDate()));
+		this.addedByColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getAddedBy()));
 
-        if (this.statusLabel != null) {
-            this.statusLabel.setText("");
-        }
+		this.timeAddedColumn.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getTimestamp()));
+	}
 
-        loadStockItems();
-    }
+	@FXML
+	private void refreshTableFromLog() {
+		// Copy and sort CHANGE_LOG (most recent first)
+		List<StockChangeEntry> sorted = new ArrayList<>(AddStockChangesPageCodeBehind.CHANGE_LOG);
+		sorted.sort(Comparator.comparing(StockChangeEntry::getTimestamp).reversed());
 
-    @FXML
-    private void handleRefresh() {
-        loadStockItems();
-    }
+		ObservableList<StockChangeEntry> items = FXCollections.observableArrayList(sorted);
+		this.stockTableView.setItems(items);
+	}
 
-    private void loadStockItems() {
-        Inventory inventory = AddStockChangesPageCodeBehind.getInventory();
+	@FXML
+	private void populateCrewMateFilterOptions() {
+		// Unique "addedBy" values from the log
+		List<String> crewNames = AddStockChangesPageCodeBehind.CHANGE_LOG.stream().map(StockChangeEntry::getAddedBy)
+				.distinct().sorted().collect(Collectors.toList());
 
-        ObservableList<Stock> items =
-                FXCollections.observableArrayList(inventory.getAllStock());
+		this.crewMateFilterComboBox.setItems(FXCollections.observableArrayList(crewNames));
+		this.crewMateFilterComboBox.setPromptText("All crewmates");
+	}
 
-        this.stockTableView.setItems(items);
+	// ========= FILTER LOGIC =========
 
-        if (this.statusLabel != null) {
-            this.statusLabel.setText(items.size() + " item(s) loaded.");
-        }
-    }
+	@FXML
+	private void handleApplyFilters(ActionEvent event) {
+		this.statusLabel.setText("");
 
-    @FXML
-    private void backToLandingPage() throws IOException {
-        // View Stock Changes is a Quartermaster feature,
-        // so Home goes back to QuarterMasterLandingPage.
-        Parent root = FXMLLoader.load(getClass().getResource(
-            "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml"));
+		List<StockChangeEntry> entries = new ArrayList<>(AddStockChangesPageCodeBehind.CHANGE_LOG);
 
-        Stage stage = (Stage) this.homeButton.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
+		// --- Filter by Special Qualities (Alternative Flow #1) ---
+		boolean filterFlammable = this.flammableFilterCheckBox.isSelected();
+		boolean filterPerishable = this.perishableFilterCheckBox.isSelected();
+		boolean filterLiquid = this.liquidFilterCheckBox.isSelected();
 
-    @FXML
-    private void backToLoginPage() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(
-            "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"));
+		if (filterFlammable || filterPerishable || filterLiquid) {
+			entries = entries.stream().filter(entry -> {
+				Set<StockAttributes> attrs = entry.getStock().getAttributes();
+				boolean ok = true;
 
-        Stage stage = (Stage) this.logoutButton.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
+				if (filterFlammable) {
+					ok = ok && attrs.contains(StockAttributes.FLAMMABLE);
+				}
+				if (filterPerishable) {
+					ok = ok && attrs.contains(StockAttributes.PERISHABLE);
+				}
+				if (filterLiquid) {
+					ok = ok && attrs.contains(StockAttributes.LIQUID);
+				}
+				return ok;
+			}).collect(Collectors.toList());
+		}
+
+		// --- Filter by Crewmate (Alternative Flow #2) ---
+		String selectedCrew = this.crewMateFilterComboBox.getValue();
+		if (selectedCrew != null && !selectedCrew.isBlank()) {
+			entries = entries.stream().filter(entry -> selectedCrew.equals(entry.getAddedBy()))
+					.collect(Collectors.toList());
+		}
+
+		// --- Filter by Time Range (Alternative Flows #3 & #4) ---
+		LocalDate startDate = this.startDatePicker.getValue();
+		LocalDate endDate = this.endDatePicker.getValue();
+
+		if (startDate != null || endDate != null) {
+
+			// Validate time range (Alternative Flow: Invalid Time Range)
+			if (startDate != null && endDate != null && !endDate.isAfter(startDate)) {
+				this.statusLabel.setText("End date must be AFTER start date.");
+				return; // keep previous table contents
+			}
+
+			entries = entries.stream().filter(entry -> {
+				LocalDate entryDate = entry.getTimestamp().toLocalDate();
+
+				if (startDate != null && entryDate.isBefore(startDate)) {
+					return false;
+				}
+				if (endDate != null && entryDate.isAfter(endDate)) {
+					return false;
+				}
+				return true;
+			}).collect(Collectors.toList());
+		}
+
+		// --- Apply sort: most recent first (Primary Flow) ---
+		entries.sort(Comparator.comparing(StockChangeEntry::getTimestamp).reversed());
+
+		this.stockTableView.setItems(FXCollections.observableArrayList(entries));
+		this.statusLabel.setText("Filters applied. Showing " + entries.size() + " change(s).");
+	}
+
+	@FXML
+	private void handleClearFilters(ActionEvent event) {
+		this.flammableFilterCheckBox.setSelected(false);
+		this.perishableFilterCheckBox.setSelected(false);
+		this.liquidFilterCheckBox.setSelected(false);
+		this.crewMateFilterComboBox.setValue(null);
+		this.startDatePicker.setValue(null);
+		this.endDatePicker.setValue(null);
+		this.statusLabel.setText("");
+
+		this.refreshTableFromLog();
+	}
+
+	@FXML
+	private void handleRefresh(ActionEvent event) {
+		this.populateCrewMateFilterOptions();
+		this.refreshTableFromLog();
+		this.statusLabel.setText("Refreshed from log.");
+	}
+
+	// ========= NAVIGATION (same style as you requested) =========
+
+	@FXML
+	private void backToLandingPage(ActionEvent event) throws IOException {
+		// View Stock Changes is quartermaster-only, so we go back to Quartermaster
+		// landing.
+		Parent root = FXMLLoader.load(getClass()
+				.getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml"));
+
+		Stage stage = (Stage) this.homeButton.getScene().getWindow();
+		stage.setScene(new Scene(root));
+		stage.show();
+	}
+
+	@FXML
+	private void backToLoginPage(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader
+				.load(getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"));
+
+		Stage stage = (Stage) this.logoutButton.getScene().getWindow();
+		stage.setScene(new Scene(root));
+		stage.show();
+	}
 }

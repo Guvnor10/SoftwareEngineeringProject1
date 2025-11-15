@@ -23,7 +23,7 @@ class TestInventory {
 	void testNewInventoryIsEmpty() {
 		Inventory inventory = new Inventory();
 
-		assertTrue(inventory.isEmpty(), "New inventory should be empty");
+		assertTrue(inventory.hasFreeSpace(), "New inventory should be empty");
 		assertEquals(0, inventory.getAllStock().size(), "New inventory should have 0 items");
 	}
 
@@ -35,7 +35,7 @@ class TestInventory {
 		inventory.addStock(stock);
 
 		List<Stock> items = inventory.getAllStock();
-		assertFalse(inventory.isEmpty(), "Inventory should not be empty after adding stock");
+		assertFalse(inventory.hasFreeSpace(), "Inventory should not be empty after adding stock");
 		assertEquals(1, items.size(), "Inventory should contain 1 item");
 		assertEquals(stock, items.get(0), "The added stock should be stored in the inventory");
 	}
@@ -66,10 +66,10 @@ class TestInventory {
 	void testIsEmptyAfterAddingAndNotEmpty() {
 		Inventory inventory = new Inventory();
 
-		assertTrue(inventory.isEmpty(), "Inventory should start empty");
+		assertTrue(inventory.hasFreeSpace(), "Inventory should start empty");
 
 		inventory.addStock(createSampleStock());
 
-		assertFalse(inventory.isEmpty(), "Inventory should not be empty after adding an item");
+		assertFalse(inventory.hasFreeSpace(), "Inventory should not be empty after adding an item");
 	}
 }

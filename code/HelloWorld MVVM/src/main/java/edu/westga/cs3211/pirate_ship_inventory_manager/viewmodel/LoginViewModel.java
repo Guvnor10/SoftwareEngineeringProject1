@@ -1,95 +1,60 @@
 package edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel;
 
-import edu.westga.cs3211.pirate_ship_inventory_manager.model.User;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class ViewModel.
- * 
- * @author CS 3211
- * @version Fall 2025
+ * The Class LoginViewModel.
  */
-
 public class LoginViewModel {
 
-	private StringProperty greetingProperty;
-	private StringProperty nameProperty;
-	private StringProperty allNamesProperty;
+	/** The logged in user name. */
+	private static String loggedInUserName = null;
+	
+	/** The logged in role. */
+	private static Roles loggedInRole = null;
 
 	/**
-	 * Instantiates a new greeting view model.
-	 */
-	public LoginViewModel() {
-		// this will set the CodeBehind's greetingLabel to Hello, World!
-		// because
-		// this.greetingLabel.textProperty().bind(this.viewModel.greetingProperty());
-		// i.e., the CodeBehind's greetingLabel.textProperty is
-		// unidirectionally bound to greetingProperty
-		// when the greetingProperty's text changes, it triggers the change
-		// in the CodeBehind's greetingLabel
-		this.greetingProperty = new SimpleStringProperty("Hello, World!");
-		this.nameProperty = new SimpleStringProperty("");
-		this.allNamesProperty = new SimpleStringProperty("");
-	}
-
-	/**
-	 * Gets the greeting property.
+	 * Sets the logged in user.
 	 *
-	 * @return the greeting Property.
+	 * @param username the new logged in user
 	 */
-	public StringProperty greetingProperty() {
-		return this.greetingProperty;
+	public static void setLoggedInUser(String username) {
+		loggedInUserName = username;
 	}
 
 	/**
-	 * Gets the name property.
+	 * Sets the logged in role.
 	 *
-	 * @return the nameProperty
+	 * @param role the new logged in role
 	 */
-	public StringProperty nameProperty() {
-		return this.nameProperty;
+	public static void setLoggedInRole(Roles role) {
+		loggedInRole = role;
 	}
 
 	/**
-	 * Gets the allNamesProperty.
+	 * Gets the logged in user.
 	 *
-	 * @return the allNamesProperty
+	 * @return the logged in user
 	 */
-	public StringProperty allNamesProperty() {
-		return this.allNamesProperty;
+	public static String getLoggedInUser() {
+		return loggedInUserName;
 	}
+
 	/**
-	 * Say greetings.
-	 * 
-	 * @precondition: none
-	 * @postcondition: the greeting label has text "Hello, xxx!" where xxx is what
-	 *                 the user entered in the nameTextfield and nameTextField is
-	 *                 set to empty. If the user didn't enter any name, returns.
-	 * 
+	 * Gets the logged in role.
+	 *
+	 * @return the logged in role
 	 */
-
-	public void sayGreeting() {
-
-		String name = this.nameProperty.getValue();
-	    if (!name.isEmpty()) {
-	    	
-	        this.greetingProperty.setValue("Hello! " + name);
-
-	        if (this.allNamesProperty.getValue().isEmpty()) {
-	            this.allNamesProperty.setValue(name);
-	        } else {
-	            this.allNamesProperty.setValue(
-	                this.allNamesProperty.getValue() + System.lineSeparator() + name
-	            );
-	        }
-			// this sets the viewModel's nameProperty to empty
-			// since it's bi-directionally bound to the codebehind's
-			// nameTextField.textProperty
-			// it will set nameTextField to empty.
-			this.nameProperty.setValue("");
-		}
-
+	public static Roles getLoggedInRole() {
+		return loggedInRole;
 	}
 
+	/**
+	 * Logout.
+	 */
+	public static void logout() {
+		loggedInUserName = null;
+		loggedInRole = null;
+	}
 }
