@@ -34,7 +34,7 @@ public class QuarterMasterLandingPageCodeBehind {
 
     @FXML
     void goToAddStockLanding(ActionEvent event) throws IOException {
-    	AddStockChangesPageCodeBehind.setUserRole("QUARTERMASTER");
+    	AddStockChangesPageCodeBehind.setLastRole("QUARTERMASTER");
     	Parent root = FXMLLoader.load(
     	        getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/AddStockChangesPage.fxml")
     	    );
