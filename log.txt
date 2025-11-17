@@ -1,0 +1,61 @@
+commit ec980235168fbfe0f2a5e6163826f658b1517d5f
+Merge: 09b6393 799dd9d
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Mon Nov 17 02:56:47 2025 -0500
+
+    Merge branch 'main' into local
+    Merge branch 'main' of https://github.com/Guvnor10/SoftwareEngineeringProject1
+
+commit 09b6393a04b3311e2d64d78028c6e95f9d22b222
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Mon Nov 17 02:54:44 2025 -0500
+
+    Added Last Tests for Branch Coverage
+    
+    Revised the test classes to achieve branch coverage
+
+commit 799dd9d233f26b14afd3a03b612b4d97ee2d4d37
+Author: Guvnor10 <gn00021@my.westga.edu>
+Date:   Sun Nov 16 20:15:51 2025 -0500
+
+    Update README with login credentials
+    
+    Added login credentials for Crewmate and Quartermaster.
+
+commit eb310164acbfdcab2fccdedd089a895a9261abc3
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Sat Nov 15 18:17:40 2025 -0500
+
+    Fixed ViewStockLandingPage
+    
+    I added filter functionality to the this landing page and also added conditions aswell (Perfect, Usable and Unusable)
+
+commit 991049b5571b99f59f3098621390cbc8ba3a662a
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Sat Nov 15 01:32:01 2025 -0500
+
+    Added View Stock Changes GUI and Code Behind Class and Functionality in Inventory and Stock
+    
+    I added the functionality for the viewStockGUI along with the inventory class. I also added test constructors for stock and inventory in the Java Folders.
+
+commit 71947cf3947a21367a2af23353621c59ddb21b03
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Fri Nov 14 15:21:24 2025 -0500
+
+    Update 2:
+    
+    In this commit, I added 3 more views. AddStockChanges, Quartermaster and Crewmate view pages aswell. Also added functionality to their CodeBehind Scripts too. In the Model Package, I renamed person to User and added Stock, Inventory, Authenticator and Roles, Stock Attributes Classes as well. Also implemented two working test packages for User and authenticator for each constructor.
+
+commit dfe1d2cd2c7b123a59ec2ddf91df48c6864b037d
+Author: Guvnor  Nnanna <gn00021@my.westga.edu>
+Date:   Thu Nov 13 14:51:50 2025 -0500
+
+    Refactored Project Name and GUI
+    
+    I refactored the name of the classes, and then made some tweaks to the GUI for the Login Page.
+
+commit 04fbf676fedf25e761119eab14098865a6065b11
+Author: Guvnor10 <gn00021@my.westga.edu>
+Date:   Thu Nov 13 14:00:16 2025 -0500
+
+    Initial commit
