@@ -32,65 +32,106 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+/**
+ * Class
+ * 
+ * @author gn00021 The Class ViewStockChangesPageCodeBehind.
+ * @version Fall2025
+ */
 public class ViewStockChangesPageCodeBehind {
 
-	// ========= UI FIELDS =========
-
+	/** The home button. */
 	@FXML
 	private Button homeButton;
+
+	/** The logout button. */
 	@FXML
 	private Button logoutButton;
+
+	/** The apply filters button. */
 	@FXML
 	private Button applyFiltersButton;
+
+	/** The clear filters button. */
 	@FXML
 	private Button clearFiltersButton;
+
+	/** The refresh button. */
 	@FXML
 	private Button refreshButton;
 
+	/** The status label. */
 	@FXML
 	private Label statusLabel;
 
-	// Table + columns
+	/** The stock table view. */
 	@FXML
 	private TableView<StockChangeEntry> stockTableView;
 
+	/** The item name column. */
 	@FXML
 	private TableColumn<StockChangeEntry, String> itemNameColumn;
+
+	/** The quantity column. */
 	@FXML
 	private TableColumn<StockChangeEntry, Integer> quantityColumn;
+
+	/** The size column. */
 	@FXML
 	private TableColumn<StockChangeEntry, Double> sizeColumn;
+
+	/** The attributes column. */
 	@FXML
 	private TableColumn<StockChangeEntry, String> attributesColumn;
+
+	/** The condition column. */
 	@FXML
 	private TableColumn<StockChangeEntry, String> conditionColumn;
+
+	/** The expiration date column. */
 	@FXML
 	private TableColumn<StockChangeEntry, LocalDate> expirationDateColumn;
+
+	/** The compartment column. */
 	@FXML
 	private TableColumn<StockChangeEntry, String> compartmentColumn;
+
+	/** The added by column. */
 	@FXML
 	private TableColumn<StockChangeEntry, String> addedByColumn;
+
+	/** The time added column. */
 	@FXML
 	private TableColumn<StockChangeEntry, LocalDateTime> timeAddedColumn;
 
+	/** The flammable filter check box. */
 	// Filters
 	@FXML
 	private CheckBox flammableFilterCheckBox;
+
+	/** The perishable filter check box. */
 	@FXML
 	private CheckBox perishableFilterCheckBox;
+
+	/** The liquid filter check box. */
 	@FXML
 	private CheckBox liquidFilterCheckBox;
 
+	/** The crew mate filter combo box. */
 	@FXML
 	private ComboBox<String> crewMateFilterComboBox;
 
+	/** The start date picker. */
 	@FXML
 	private DatePicker startDatePicker;
+
+	/** The end date picker. */
 	@FXML
 	private DatePicker endDatePicker;
 
-	// ========= INITIALIZE =========
-
+	/**
+	 * Initialize.
+	 */
 	@FXML
 	private void initialize() {
 		this.configureTableColumns();
@@ -99,10 +140,12 @@ public class ViewStockChangesPageCodeBehind {
 		this.statusLabel.setText("");
 	}
 
-	// ========= TABLE SETUP =========
+	/**
+	 * Configure table columns.
+	 */
 	@FXML
 	private void configureTableColumns() {
-		// For easier reading
+
 		this.itemNameColumn.setCellValueFactory(cell -> {
 			Stock stock = cell.getValue().getStock();
 			return new SimpleStringProperty(stock.getName());
@@ -143,9 +186,12 @@ public class ViewStockChangesPageCodeBehind {
 		this.timeAddedColumn.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getTimestamp()));
 	}
 
+	/**
+	 * Refresh table from log.
+	 */
 	@FXML
 	private void refreshTableFromLog() {
-		// Copy and sort CHANGE_LOG (most recent first)
+
 		List<StockChangeEntry> sorted = new ArrayList<>(AddStockChangesPageCodeBehind.CHANGE_LOG);
 		sorted.sort(Comparator.comparing(StockChangeEntry::getTimestamp).reversed());
 
@@ -153,9 +199,12 @@ public class ViewStockChangesPageCodeBehind {
 		this.stockTableView.setItems(items);
 	}
 
+	/**
+	 * Populate crew mate filter options.
+	 */
 	@FXML
 	private void populateCrewMateFilterOptions() {
-		// Unique "addedBy" values from the log
+
 		List<String> crewNames = AddStockChangesPageCodeBehind.CHANGE_LOG.stream().map(StockChangeEntry::getAddedBy)
 				.distinct().sorted().collect(Collectors.toList());
 
@@ -163,15 +212,17 @@ public class ViewStockChangesPageCodeBehind {
 		this.crewMateFilterComboBox.setPromptText("All crewmates");
 	}
 
-	// ========= FILTER LOGIC =========
-
+	/**
+	 * Handle apply filters.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	private void handleApplyFilters(ActionEvent event) {
 		this.statusLabel.setText("");
 
 		List<StockChangeEntry> entries = new ArrayList<>(AddStockChangesPageCodeBehind.CHANGE_LOG);
 
-		// --- Filter by Special Qualities (Alternative Flow #1) ---
 		boolean filterFlammable = this.flammableFilterCheckBox.isSelected();
 		boolean filterPerishable = this.perishableFilterCheckBox.isSelected();
 		boolean filterLiquid = this.liquidFilterCheckBox.isSelected();
@@ -194,25 +245,21 @@ public class ViewStockChangesPageCodeBehind {
 			}).collect(Collectors.toList());
 		}
 
-		// --- Filter by Crewmate (Alternative Flow #2) ---
 		String selectedCrew = this.crewMateFilterComboBox.getValue();
 		if (selectedCrew != null && !selectedCrew.isBlank()) {
 			entries = entries.stream().filter(entry -> selectedCrew.equals(entry.getAddedBy()))
 					.collect(Collectors.toList());
 		}
 
-		// --- Filter by Time Range (Alternative Flows #3 & #4) ---
 		LocalDate startDate = this.startDatePicker.getValue();
 		LocalDate endDate = this.endDatePicker.getValue();
 
 		if (startDate != null || endDate != null) {
 
-			// Validate time range (Alternative Flow: Invalid Time Range)
 			if (startDate != null && endDate != null && !endDate.isAfter(startDate)) {
 				this.statusLabel.setText("End date must be AFTER start date.");
-				return; // keep previous table contents
+				return;
 			}
-
 			entries = entries.stream().filter(entry -> {
 				LocalDate entryDate = entry.getTimestamp().toLocalDate();
 
@@ -226,13 +273,17 @@ public class ViewStockChangesPageCodeBehind {
 			}).collect(Collectors.toList());
 		}
 
-		// --- Apply sort: most recent first (Primary Flow) ---
 		entries.sort(Comparator.comparing(StockChangeEntry::getTimestamp).reversed());
 
 		this.stockTableView.setItems(FXCollections.observableArrayList(entries));
 		this.statusLabel.setText("Filters applied. Showing " + entries.size() + " change(s).");
 	}
 
+	/**
+	 * Handle clear filters.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	private void handleClearFilters(ActionEvent event) {
 		this.flammableFilterCheckBox.setSelected(false);
@@ -246,6 +297,11 @@ public class ViewStockChangesPageCodeBehind {
 		this.refreshTableFromLog();
 	}
 
+	/**
+	 * Handle refresh.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	private void handleRefresh(ActionEvent event) {
 		this.populateCrewMateFilterOptions();
@@ -253,12 +309,15 @@ public class ViewStockChangesPageCodeBehind {
 		this.statusLabel.setText("Refreshed from log.");
 	}
 
-	// ========= NAVIGATION (same style as you requested) =========
-
+	/**
+	 * Back to landing page.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	private void backToLandingPage(ActionEvent event) throws IOException {
-		// View Stock Changes is quartermaster-only, so we go back to Quartermaster
-		// landing.
+
 		Parent root = FXMLLoader.load(getClass()
 				.getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml"));
 
@@ -267,6 +326,12 @@ public class ViewStockChangesPageCodeBehind {
 		stage.show();
 	}
 
+	/**
+	 * Back to login page.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	private void backToLoginPage(ActionEvent event) throws IOException {
 		Parent root = FXMLLoader

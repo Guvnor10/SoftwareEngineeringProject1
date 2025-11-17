@@ -3,61 +3,41 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="983.0"
-	prefWidth="1042.0" xmlns="http://javafx.com/javafx/23.0.1"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="edu.westga.cs3211.pirate_ship_inventory_manager.view.ViewStockChangesPageCodeBehind">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="983.0" prefWidth="1176.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3211.pirate_ship_inventory_manager.view.ViewStockChangesPageCodeBehind">
 
 	<children>
 
 		<!-- Navigation Buttons -->
-		<Button fx:id="homeButton" layoutX="14.0" layoutY="14.0"
-			prefHeight="25.0" prefWidth="102.0" text="Home"
-			onAction="#backToLandingPage" />
+		<Button fx:id="homeButton" layoutX="14.0" layoutY="14.0" onAction="#backToLandingPage" prefHeight="25.0" prefWidth="102.0" text="Home" />
 
-		<Button fx:id="logoutButton" layoutX="804.0" layoutY="14.0"
-			prefHeight="25.0" prefWidth="102.0" text="Log Out"
-			onAction="#backToLoginPage" />
+		<Button fx:id="logoutButton" layoutX="1060.0" layoutY="14.0" onAction="#backToLoginPage" prefHeight="25.0" prefWidth="102.0" text="Log Out" />
 
 		<!-- Table -->
-		<TableView fx:id="stockTableView" layoutX="54.0"
-			layoutY="111.0" prefHeight="434.0" prefWidth="944.0">
+		<TableView fx:id="stockTableView" layoutX="42.0" layoutY="111.0" prefHeight="434.0" prefWidth="1092.0">
 
 			<columns>
-				<TableColumn fx:id="itemNameColumn" prefWidth="98.0"
-					text="Item Name" />
-				<TableColumn fx:id="quantityColumn" prefWidth="73.0"
-					text="Quantity" />
-				<TableColumn fx:id="sizeColumn" prefWidth="89.0"
-					text="Size" />
-				<TableColumn fx:id="attributesColumn" prefWidth="89.0"
-					text="Attributes" />
-				<TableColumn fx:id="conditionColumn" prefWidth="124.0"
-					text="Condition" />
-				<TableColumn fx:id="expirationDateColumn"
-					prefWidth="109.0" text="Expiration Date" />
-				<TableColumn fx:id="compartmentColumn" prefWidth="103.0"
-					text="Compartment" />
-				<TableColumn fx:id="addedByColumn" prefWidth="132.0"
-					text="Added By" />
-				<TableColumn fx:id="timeAddedColumn" prefWidth="126.0"
-					text="Time Added" />
+				<TableColumn fx:id="itemNameColumn" prefWidth="98.0" text="Item Name" />
+				<TableColumn fx:id="quantityColumn" prefWidth="73.0" text="Quantity" />
+				<TableColumn fx:id="sizeColumn" prefWidth="89.0" text="Size" />
+				<TableColumn fx:id="attributesColumn" prefWidth="89.0" text="Attributes" />
+				<TableColumn fx:id="conditionColumn" prefWidth="142.0" text="Condition" />
+				<TableColumn fx:id="expirationDateColumn" prefWidth="113.0" text="Expiration Date" />
+				<TableColumn fx:id="compartmentColumn" prefWidth="196.0" text="Compartment" />
+				<TableColumn fx:id="addedByColumn" prefWidth="131.0" text="Added By" />
+				<TableColumn fx:id="timeAddedColumn" prefWidth="160.0" text="Time Added" />
 			</columns>
 		</TableView>
 
 		<!-- Status Label (Fixes your crash!) -->
-		<Label fx:id="statusLabel" layoutX="54.0" layoutY="560.0"
-			prefWidth="600" style="-fx-text-fill: red; -fx-font-size: 14px;"
-			text="" />
+		<Label fx:id="statusLabel" layoutX="54.0" layoutY="560.0" prefWidth="600" style="-fx-text-fill: red; -fx-font-size: 14px;" text="" />
 
 		<!-- FILTER SECTION -->
 		<HBox layoutX="54.0" layoutY="590.0" spacing="40">
@@ -65,19 +45,15 @@
 			<!-- SPECIAL QUALITIES FILTER -->
 			<VBox spacing="5">
 				<Label text="Filter By Special Qualities" />
-				<CheckBox fx:id="flammableFilterCheckBox" text="Flammable"
-					onAction="#handleApplyFilters" />
-				<CheckBox fx:id="perishableFilterCheckBox"
-					text="Perishable" onAction="#handleApplyFilters" />
-				<CheckBox fx:id="liquidFilterCheckBox" text="Liquid"
-					onAction="#handleApplyFilters" />
+				<CheckBox fx:id="flammableFilterCheckBox" onAction="#handleApplyFilters" text="Flammable" />
+				<CheckBox fx:id="perishableFilterCheckBox" onAction="#handleApplyFilters" text="Perishable" />
+				<CheckBox fx:id="liquidFilterCheckBox" onAction="#handleApplyFilters" text="Liquid" />
 			</VBox>
 
 			<!-- CREWMATE FILTER -->
 			<VBox spacing="5">
 				<Label text="Filter By Crewmate" />
-				<ComboBox fx:id="crewMateFilterComboBox" prefWidth="180"
-					onAction="#handleApplyFilters" />
+				<ComboBox fx:id="crewMateFilterComboBox" onAction="#handleApplyFilters" prefWidth="180" />
 			</VBox>
 
 			<!-- DATE RANGE FILTER -->
@@ -94,14 +70,11 @@
 		</HBox>
 
 		<!-- ACTION BUTTONS -->
-		<Button layoutX="709.0" layoutY="599.0" text="Apply Filters"
-			onAction="#handleApplyFilters" />
+		<Button layoutX="678.0" layoutY="599.0" onAction="#handleApplyFilters" prefHeight="51.0" prefWidth="132.0" text="Apply Filters" />
 
-		<Button layoutX="709.0" layoutY="639.0" text="Clear Filters"
-			onAction="#handleClearFilters" />
+		<Button layoutX="844.0" layoutY="599.0" onAction="#handleClearFilters" prefHeight="51.0" prefWidth="132.0" text="Clear Filters" />
 
-		<Button layoutX="709.0" layoutY="697.0" text="Refresh"
-			onAction="#handleRefresh" />
+		<Button layoutX="1003.0" layoutY="599.0" onAction="#handleRefresh" prefHeight="51.0" prefWidth="132.0" text="Refresh" />
 
 	</children>
 </AnchorPane>

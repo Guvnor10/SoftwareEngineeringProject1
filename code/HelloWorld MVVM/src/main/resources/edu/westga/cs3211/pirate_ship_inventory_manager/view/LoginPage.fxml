@@ -20,11 +20,6 @@
          </font></Label>
       <Label alignment="CENTER_RIGHT" layoutX="47.0" layoutY="114.0" prefHeight="27.0" prefWidth="75.0" text="Password:" textAlignment="RIGHT" />
       <TextField fx:id="passwordTextField" layoutX="145.0" layoutY="115.0" promptText="Enter your name" />
-      <Label fx:id="errorLabel" alignment="CENTER" layoutX="105.0" layoutY="240.0" prefHeight="17.0" prefWidth="212.0" text="lol" textFill="RED">
-         <font>
-            <Font name="Arial Bold" size="12.0" />
-         </font>
-      </Label>
          </children>
 
 

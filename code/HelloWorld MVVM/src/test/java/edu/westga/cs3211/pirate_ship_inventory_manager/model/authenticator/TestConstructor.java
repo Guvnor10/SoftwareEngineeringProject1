@@ -10,78 +10,64 @@ import edu.westga.cs3211.pirate_ship_inventory_manager.model.User;
 
 class TestAuthenticator {
 
-    @Test
-    void verifyCredentialsReturnsTrueForValidCrewmate() {
+	@Test
+    void verifyCredentialsShouldReturnTrueForValidUser() {
         Authenticator auth = new Authenticator();
 
-        boolean result = auth.verifyCredentials("crewmate1", "pass1");
+        boolean result = auth.verifyCredentials("crew", "pass");
 
-        assertTrue(result, "Valid crewmate credentials should return true");
+        assertTrue(result);
     }
 
     @Test
-    void verifyCredentialsReturnsTrueForValidQuartermaster() {
+    void verifyCredentialsShouldReturnFalseForWrongPassword() {
         Authenticator auth = new Authenticator();
 
-        boolean result = auth.verifyCredentials("quarter1", "pass2");
+        boolean result = auth.verifyCredentials("crew", "wrong");
 
-        assertTrue(result, "Valid quartermaster credentials should return true");
+        assertFalse(result);
     }
 
     @Test
-    void verifyCredentialsReturnsFalseForWrongPassword() {
+    void verifyCredentialsShouldReturnFalseForUnknownUser() {
         Authenticator auth = new Authenticator();
 
-        boolean result = auth.verifyCredentials("crewmate1", "wrongPass");
+        boolean result = auth.verifyCredentials("nobody", "anything");
 
-        assertFalse(result, "Wrong password should return false");
+        assertFalse(result);
     }
 
     @Test
-    void verifyCredentialsReturnsFalseForUnknownUser() {
+    void getUserShouldReturnUserForKnownUsername() {
         Authenticator auth = new Authenticator();
 
-        boolean result = auth.verifyCredentials("unknownUser", "pass1");
+        User user = auth.getUser("crew");
 
-        assertFalse(result, "Unknown username should return false");
+        assertNotNull(user);
+        assertEquals("crew", user.getUserName());
+        assertEquals(Roles.CREWMATE, user.getRole());
     }
 
     @Test
-    void verifyCredentialsReturnsFalseForNullUsername() {
+    void getUserShouldReturnNullForUnknownUsername() {
         Authenticator auth = new Authenticator();
 
-        boolean result = auth.verifyCredentials(null, "pass1");
+        User user = auth.getUser("nobody");
 
-        assertFalse(result, "Null username should behave like unknown user and return false");
+        assertNull(user);
+    }
+    
+    @Test
+    void verifyCredentialsShouldReturnFalseWhenUsernameIsNull() {
+        Authenticator auth = new Authenticator();
+        boolean result = auth.verifyCredentials(null, "pass");
+        assertFalse(result);
     }
 
     @Test
-    void verifyCredentialsReturnsFalseForNullPassword() {
+    void verifyCredentialsShouldReturnFalseWhenPasswordIsNull() {
         Authenticator auth = new Authenticator();
-
-        boolean result = auth.verifyCredentials("crewmate1", null);
-
-        assertFalse(result, "Null password should return false");
-    }
-
-    @Test
-    void getUserReturnsCorrectUserForExistingUsername() {
-        Authenticator auth = new Authenticator();
-
-        User result = auth.getUser("quarter1");
-
-        assertNotNull(result, "Existing username should return a User");
-        assertEquals("quarter1", result.getUserName(), "Username should match");
-        assertEquals("pass2", result.getPassword(), "Password should match");
-        assertEquals(Roles.QUARTERMASTER, result.getRole(), "Role should be QUARTERMASTER");
-    }
-
-    @Test
-    void getUserReturnsNullForUnknownUsername() {
-        Authenticator auth = new Authenticator();
-
-        User result = auth.getUser("doesNotExist");
-
-        assertNull(result, "Unknown username should return null");
+        boolean result = auth.verifyCredentials("crew", null);
+        assertFalse(result);
     }
 }

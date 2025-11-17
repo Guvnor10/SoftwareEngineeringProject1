@@ -18,43 +18,34 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/** Class
+/**
+ * Code-behind for LoginPage.fxml.
+ *
  * @author gn00021
- * The Class LoginCodeBehind.
  * @version Fall2025
  */
 public class LoginCodeBehind {
 
-	/** The resources. */
 	@FXML
 	private ResourceBundle resources;
 
-	/** The location. */
 	@FXML
 	private URL location;
 
-	/** The greeting label. */
 	@FXML
 	private Label greetingLabel;
 
-	/** The error label. */
-	@FXML
-	private Label errorLabel;
-
-	/** The login button. */
 	@FXML
 	private Button loginButton;
 
-	/** The password text field. */
 	@FXML
 	private TextField passwordTextField;
 
-	/** The username text field. */
 	@FXML
 	private TextField usernameTextField;
 
 	/**
-	 * Handle submit.
+	 * Handles the Log In button click.
 	 *
 	 * @param event the event
 	 */
@@ -64,29 +55,32 @@ public class LoginCodeBehind {
 		String enteredPassword = this.passwordTextField.getText();
 
 		Authenticator auth = new Authenticator();
-
 		boolean valid = auth.verifyCredentials(enteredUsername, enteredPassword);
 
 		if (!valid) {
-			this.errorLabel.setText("Invalid username or password.");
-			this.errorLabel.setVisible(true);
+
+			try {
+				this.loadPage("/edu/westga/cs3211/pirate_ship_inventory_manager/view/InvalidCredentialsPage.fxml");
+			} catch (IOException e0) {
+
+				this.greetingLabel.setText("Error loading Invalid Credentials page.");
+				e0.printStackTrace();
+			}
 			return;
 		}
 
-		this.errorLabel.setVisible(false);
-
-		// Login was successful
 		User loggedIn = auth.getUser(enteredUsername);
-		
+
 		LoginViewModel.setLoggedInUser(loggedIn.getUserName());
 		LoginViewModel.setLoggedInRole(loggedIn.getRole());
+
 		try {
 			if (loggedIn.getRole() == Roles.CREWMATE) {
 				this.loadPage("/edu/westga/cs3211/pirate_ship_inventory_manager/view/CrewmateLandingPage.fxml");
 			} else if (loggedIn.getRole() == Roles.QUARTERMASTER) {
 				this.loadPage("/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
 			} else if (loggedIn.getRole() == Roles.COOK) {
-				// Optional: add cook page later
+
 				this.greetingLabel.setText("Cook login successful (page not implemented).");
 			}
 		} catch (IOException e0) {
@@ -96,10 +90,10 @@ public class LoginCodeBehind {
 	}
 
 	/**
-	 * Load page.
+	 * Loads a new FXML page into the current stage.
 	 *
-	 * @param fxmlPath the fxml path
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @param fxmlPath the FXML resource path
+	 * @throws IOException if the FXML cannot be loaded
 	 */
 	private void loadPage(String fxmlPath) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
@@ -110,22 +104,16 @@ public class LoginCodeBehind {
 	}
 
 	/**
-	 * Initialize.
+	 * Initialize the login page.
 	 */
 	@FXML
 	void initialize() {
-		assert this.greetingLabel != null : "fx:id=\"greetingLabel\" not injected.";
-		assert this.loginButton != null : "fx:id=\"loginButton\" not injected.";
-		assert this.passwordTextField != null : "fx:id=\"passwordTextField\" not injected.";
-		assert this.usernameTextField != null : "fx:id=\"usernameTextField\" not injected.";
+		assert this.greetingLabel != null : "fx:id=\"greetingLabel\" was not injected.";
+		assert this.loginButton != null : "fx:id=\"loginButton\" was not injected.";
+		assert this.passwordTextField != null : "fx:id=\"passwordTextField\" was not injected.";
+		assert this.usernameTextField != null : "fx:id=\"usernameTextField\" was not injected.";
 
-		this.errorLabel.setText(""); 
-		this.errorLabel.setVisible(false);
-
-		// Disable login button until both fields have text
-		this.loginButton.disableProperty()
-				.bind(this.usernameTextField.textProperty().isEmpty().or(this.passwordTextField.textProperty().isEmpty()));
-
+		this.loginButton.disableProperty().bind(
+				this.usernameTextField.textProperty().isEmpty().or(this.passwordTextField.textProperty().isEmpty()));
 	}
-
 }

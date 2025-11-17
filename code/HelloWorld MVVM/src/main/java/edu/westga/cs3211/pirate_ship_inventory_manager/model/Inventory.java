@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /** Class
  * @author gn00021
  * Represents the ship's inventory of compartments.
@@ -25,9 +24,9 @@ public class Inventory {
 	public Inventory() {
 		this.compartments = new ArrayList<>();
 
-		// Create example compartments (you can modify these)
 		this.compartments.add(new Compartment(100, EnumSet.of(StockAttributes.FLAMMABLE)));
 		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.PERISHABLE)));
+		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.LIQUID)));
 		this.compartments.add(new Compartment(300, EnumSet.noneOf(StockAttributes.class)));
 	}
 	
@@ -59,19 +58,18 @@ public class Inventory {
 	 * @throws IllegalStateException    if no compartment can store the stock
 	 */
 	public void addStock(Stock stock) {
-		if (stock == null) {
-			throw new IllegalArgumentException("Stock cannot be null.");
-		}
+	    if (stock == null) {
+	        throw new IllegalArgumentException("Stock cannot be null");
+	    }
 
-		for (Compartment compartment : this.compartments) {
-			if (compartment.canStore(stock)) {
-				compartment.addStock(stock);
-				return;
-			}
-		}
+	    for (Compartment compartment : this.compartments) {
+	        if (compartment.canStore(stock)) {
+	            compartment.addStock(stock);
+	            return;
+	        }
+	    }
 
-		// If we reach here, nothing could store it
-		throw new IllegalStateException("No compartment can store this stock item.");
+	    throw new IllegalStateException("No compartment has enough free space");
 	}
 
 	/**

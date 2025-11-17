@@ -6,9 +6,10 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 
-// TODO: Auto-generated Javadoc
-/**
+/** Class
+ * @author gn00021
  * Represents one type of stock item in the ship's inventory.
+ * @version Fall2025
  */
 public class Stock {
 

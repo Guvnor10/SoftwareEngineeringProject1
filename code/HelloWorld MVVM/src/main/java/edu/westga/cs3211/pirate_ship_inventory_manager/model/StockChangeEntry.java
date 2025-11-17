@@ -2,9 +2,10 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.model;
 
 import java.time.LocalDateTime;
 
-// TODO: Auto-generated Javadoc
-/**
+/** Class
+ * @author gn00021
  * The Class StockChangeEntry.
+ * @version Fall 2025
  */
 public class StockChangeEntry {
 
@@ -33,6 +34,19 @@ public class StockChangeEntry {
 		this.addedBy = addedBy;
 		this.timestamp = timestamp;
 		this.compartment = compartment;
+		
+		if (stock == null) {
+            throw new IllegalArgumentException("stock cannot be null");
+        }
+        if (addedBy == null || addedBy.isBlank()) {
+            throw new IllegalArgumentException("addedBy cannot be null/blank");
+        }
+        if (timestamp == null) {
+            throw new IllegalArgumentException("timestamp cannot be null");
+        }
+        if (compartment == null) {
+            throw new IllegalArgumentException("compartment cannot be null");
+        }
 	}
 
 	/**

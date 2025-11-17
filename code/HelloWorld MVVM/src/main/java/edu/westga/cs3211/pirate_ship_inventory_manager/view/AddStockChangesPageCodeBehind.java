@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import edu.westga.cs3211.pirate_ship_inventory_manager.Main;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Compartment;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Inventory;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Stock;
@@ -30,56 +29,88 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/** Class
+ * @author gn00021
+ * The Class AddStockChangesPageCodeBehind.
+ * @version Fall2025
+ */
 public class AddStockChangesPageCodeBehind {
 
-	// ======= INVENTORY + CHANGE LOG (static references) =======
-	private static final Inventory INVENTORY = Inventory.getSharedInventory();
+	/** The Constant CHANGE_LOG. */
 	public static final List<StockChangeEntry> CHANGE_LOG = new ArrayList<>();
 
-	// ======= UI FIELDS =======
+	/** The Constant INVENTORY. */
+	private static final Inventory INVENTORY = Inventory.getSharedInventory();
+
+	/** The name text field. */
 	@FXML
 	private TextField nameTextField;
+
+	/** The quantity text field. */
 	@FXML
 	private TextField quantityTextField;
+
+	/** The size text field. */
 	@FXML
 	private TextField sizeTextField;
 
-	// Special qualities checkboxes
+	/** The flammable check box. */
 	@FXML
 	private CheckBox flammableCheckBox;
+
+	/** The perishable check box. */
 	@FXML
 	private CheckBox perishableCheckBox;
+
+	/** The liquid check box. */
 	@FXML
 	private CheckBox liquidCheckBox;
 
-	// Condition checkboxes
+	/** The perfect condition check box. */
 	@FXML
 	private CheckBox perfectConditionCheckBox;
+
+	/** The usable condition check box. */
 	@FXML
 	private CheckBox usableConditionCheckBox;
+
+	/** The unusable condition check box. */
 	@FXML
 	private CheckBox unusableConditionCheckBox;
 
+	/** The condition text area. */
 	@FXML
 	private TextArea conditionTextArea;
 
+	/** The expiration date picker. */
 	@FXML
 	private DatePicker expirationDatePicker;
 
+	/** The compartment combo box. */
 	@FXML
 	private ComboBox<Compartment> compartmentComboBox;
 
+	/** The status label. */
 	@FXML
 	private Label statusLabel;
 
+	/** The add stock button. */
 	@FXML
 	private Button addStockButton;
+
+	/** The logout button. */
 	@FXML
 	private Button logoutButton;
+
+	/** The home button. */
 	@FXML
 	private Button homeButton;
 
-	// ======= Helper Method: Ensure only ONE condition is checked =======
+	/**
+	 * Determine condition from check boxes.
+	 *
+	 * @return the stock condition
+	 */
 	private StockCondition determineConditionFromCheckBoxes() {
 		boolean perfect = this.perfectConditionCheckBox.isSelected();
 		boolean usable = this.usableConditionCheckBox.isSelected();
@@ -87,17 +118,21 @@ public class AddStockChangesPageCodeBehind {
 
 		int count = (perfect ? 1 : 0) + (usable ? 1 : 0) + (unusable ? 1 : 0);
 		if (count != 1) {
-			return null; // either none or more than 1 chosen
+			return null;
 		}
 
-		if (perfect)
+		if (perfect) {
 			return StockCondition.PERFECT;
-		if (usable)
+		}
+		if (usable) {
 			return StockCondition.USABLE;
+		}
 		return StockCondition.UNUSABLE;
 	}
 
-	// ======= INITIALIZE =======
+	/**
+	 * Initialize.
+	 */
 	@FXML
 	public void initialize() {
 		this.compartmentComboBox.setItems(FXCollections.observableArrayList(INVENTORY.getCompartments()));
@@ -106,20 +141,22 @@ public class AddStockChangesPageCodeBehind {
 		this.statusLabel.setText("");
 	}
 
-	// ======= MAIN USE CASE LOGIC =======
+	/**
+	 * Handle add stock.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	private void handleAddStock(ActionEvent event) {
 
 		this.statusLabel.setText("");
 
-		// === Read user input ===
 		String name = this.nameTextField.getText();
 		String quantityText = this.quantityTextField.getText();
 		String sizeText = this.sizeTextField.getText();
 		String conditionNotes = this.conditionTextArea.getText();
 		LocalDate expirationDate = this.expirationDatePicker.getValue();
 
-		// === Validate required fields ===
 		if (name == null || name.isBlank()) {
 			this.statusLabel.setText("Item name is required.");
 			return;
@@ -141,35 +178,33 @@ public class AddStockChangesPageCodeBehind {
 			return;
 		}
 
-		// === Determine condition (must be exactly ONE) ===
-		StockCondition conditionEnum = determineConditionFromCheckBoxes();
+		StockCondition conditionEnum = this.determineConditionFromCheckBoxes();
 		if (conditionEnum == null) {
 			this.statusLabel.setText("Select EXACTLY ONE condition: Perfect, Usable, or Unusable.");
 			return;
 		}
 
-		// Combine enum + user notes
 		String fullCondition = conditionEnum.name();
 		if (conditionNotes != null && !conditionNotes.isBlank()) {
 			fullCondition += " - " + conditionNotes.trim();
 		}
 
-		// === Special qualities ===
 		EnumSet<StockAttributes> attributes = EnumSet.noneOf(StockAttributes.class);
-		if (this.flammableCheckBox.isSelected())
+		if (this.flammableCheckBox.isSelected()) {
 			attributes.add(StockAttributes.FLAMMABLE);
-		if (this.perishableCheckBox.isSelected())
+		}
+		if (this.perishableCheckBox.isSelected()) {
 			attributes.add(StockAttributes.PERISHABLE);
-		if (this.liquidCheckBox.isSelected())
+		}
+		if (this.liquidCheckBox.isSelected()) {
 			attributes.add(StockAttributes.LIQUID);
+		}
 
-		// Perishable must have expiration date
 		if (attributes.contains(StockAttributes.PERISHABLE) && expirationDate == null) {
 			this.statusLabel.setText("Perishable items MUST include an expiration date.");
 			return;
 		}
 
-		// === Construct the Stock object ===
 		final Stock stock;
 		try {
 			stock = new Stock(name, quantity, size, attributes, fullCondition, expirationDate);
@@ -178,10 +213,8 @@ public class AddStockChangesPageCodeBehind {
 			return;
 		}
 
-		// === Step 4: Determine compatible compartments ===
 		List<Compartment> compartments = INVENTORY.getCompartments();
 
-		// First filter: compartments with required qualities
 		List<Compartment> qualityMatches = new ArrayList<>();
 		for (Compartment comp : compartments) {
 			if (comp.getSpecialQualities().containsAll(stock.getAttributes())) {
@@ -189,13 +222,11 @@ public class AddStockChangesPageCodeBehind {
 			}
 		}
 
-		// If special qualities required but no compatible compartment
 		if (!attributes.isEmpty() && qualityMatches.isEmpty()) {
 			this.statusLabel.setText("No compartment supports qualities: " + attributes);
 			return;
 		}
 
-		// Next filter: capacity check
 		List<Compartment> compatible = new ArrayList<>();
 		List<Compartment> baseList = qualityMatches.isEmpty() ? compartments : qualityMatches;
 
@@ -205,7 +236,6 @@ public class AddStockChangesPageCodeBehind {
 			}
 		}
 
-		// Alternative flow: no compartment has enough space
 		if (compatible.isEmpty()) {
 
 			List<Compartment> hasSomeSpace = new ArrayList<>();
@@ -224,7 +254,6 @@ public class AddStockChangesPageCodeBehind {
 			return;
 		}
 
-		// Present list of compatible compartments
 		this.compartmentComboBox.setItems(FXCollections.observableArrayList(compatible));
 
 		Compartment selected = this.compartmentComboBox.getValue();
@@ -233,10 +262,8 @@ public class AddStockChangesPageCodeBehind {
 			this.compartmentComboBox.setValue(selected);
 		}
 
-		// === Add stock to compartment ===
 		selected.addStock(stock);
 
-		// === Log the stock change ===
 		String crewMateId = LoginViewModel.getLoggedInUser();
 		if (crewMateId == null) {
 			crewMateId = "Crewmate";
@@ -246,7 +273,6 @@ public class AddStockChangesPageCodeBehind {
 
 		CHANGE_LOG.add(new StockChangeEntry(stock, crewMateId, timestamp, selected));
 
-		// === Confirmation message ===
 		String message = "Stock Added Successfully!\n\n" + "Item: " + stock.getName() + "\n" + "Qty: "
 				+ stock.getQuantity() + "\n" + "Condition: " + stock.getCondition() + "\n" + "Attributes: "
 				+ stock.getAttributes() + "\n" + "Compartment: " + selected.toString() + "\n" + "Remaining Capacity: "
@@ -254,7 +280,6 @@ public class AddStockChangesPageCodeBehind {
 
 		this.statusLabel.setText(message);
 
-		// === Reset form ===
 		this.nameTextField.clear();
 		this.quantityTextField.clear();
 		this.sizeTextField.clear();
@@ -271,45 +296,56 @@ public class AddStockChangesPageCodeBehind {
 
 		this.compartmentComboBox.setValue(null);
 
-		// Refresh compartment list
 		this.compartmentComboBox.setItems(FXCollections.observableArrayList(INVENTORY.getCompartments()));
 		this.compartmentComboBox.setPromptText("Select compartment");
 	}
-	
+
+	/**
+	 * Back to landing page.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	private void backToLandingPage(ActionEvent event) throws IOException {
 		if (LoginViewModel.getLoggedInRole() == null) {
-	        // If somehow null → send to login
-	        Parent root = FXMLLoader.load(getClass().getResource(
-	            "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"));
-	        Stage stage = (Stage) this.homeButton.getScene().getWindow();
-	        stage.setScene(new Scene(root));
-	        stage.show();
-	        return;
-	    }
 
-	    String fxml;
+			Parent root = FXMLLoader.load(
+					getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"));
+			Stage stage = (Stage) this.homeButton.getScene().getWindow();
+			stage.setScene(new Scene(root));
+			stage.show();
+			return;
+		}
 
-	    switch (LoginViewModel.getLoggedInRole()) {
-	        case CREWMATE:
-	            fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/CrewmateLandingPage.fxml";
-	            break;
+		String fxml;
 
-	        case QUARTERMASTER:
-	            fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml";
-	            break;
+		switch (LoginViewModel.getLoggedInRole()) {
+		case CREWMATE:
+			fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/CrewmateLandingPage.fxml";
+			break;
 
-	        default:
-	            fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml";
-	            break;
-	    }
+		case QUARTERMASTER:
+			fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml";
+			break;
 
-	    Parent root = FXMLLoader.load(getClass().getResource(fxml));
-	    Stage stage = (Stage) this.homeButton.getScene().getWindow();
-	    stage.setScene(new Scene(root));
-	    stage.show();
+		default:
+			fxml = "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml";
+			break;
+		}
+
+		Parent root = FXMLLoader.load(getClass().getResource(fxml));
+		Stage stage = (Stage) this.homeButton.getScene().getWindow();
+		stage.setScene(new Scene(root));
+		stage.show();
 	}
 
+	/**
+	 * Back to login page.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	private void backToLoginPage(ActionEvent event) throws IOException {
 		Parent root = FXMLLoader

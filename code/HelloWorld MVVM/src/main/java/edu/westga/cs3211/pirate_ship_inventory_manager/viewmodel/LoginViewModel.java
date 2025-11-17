@@ -2,9 +2,10 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel;
 
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
 
-// TODO: Auto-generated Javadoc
-/**
+/** Class
+ * @author gn00021
  * The Class LoginViewModel.
+ * @version Fall2025
  */
 public class LoginViewModel {
 

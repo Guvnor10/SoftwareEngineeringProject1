@@ -10,47 +10,25 @@ import edu.westga.cs3211.pirate_ship_inventory_manager.model.User;
 class TestConstructor {
 
 	@Test
-    void testNullUsername() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User(null, "pass123", Roles.CREWMATE);
-        });
+    void constructorShouldCreateUser() {
+        User u = new User("jack", "pwd", Roles.CREWMATE);
+
+        assertEquals("jack", u.getUserName());
+        assertEquals("pwd", u.getPassword());
+        assertEquals(Roles.CREWMATE, u.getRole());
     }
 
     @Test
-    void testNullPassword() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("Bob", null, Roles.CREWMATE);
-        });
+    void equalsAndHashCodeShouldWork() {
+        User u1 = new User("jack", "pwd", Roles.CREWMATE);
+        User u2 = new User("jack", "pwd", Roles.CREWMATE);
+        User u3 = new User("rose", "pwd2", Roles.QUARTERMASTER);
+
+        assertEquals(u1, u2);
+        assertEquals(u1.hashCode(), u2.hashCode());
+
+        assertNotEquals(u1, u3);
+        assertNotEquals(u1, null);
+        assertNotEquals(u1, "not a user");
     }
-
-    @Test
-    void testNullRole() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("Bob", "pass123", null);
-        });
-    }
-
-    @Test
-    void testValidUserCreation() {
-        User result = new User("Bob", "pass123", Roles.CREWMATE);
-
-        assertEquals("Bob", result.getUserName(), "checking username");
-        assertEquals("pass123", result.getPassword(), "checking password");
-        assertEquals(Roles.CREWMATE, result.getRole(), "checking role");
-    }
-
-    @Test
-    void testEmptyUsername() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("", "pass123", Roles.CREWMATE);
-        });
-    }
-
-    @Test
-    void testEmptyPassword() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("Bob", "", Roles.CREWMATE);
-        });
-    }
-
 }

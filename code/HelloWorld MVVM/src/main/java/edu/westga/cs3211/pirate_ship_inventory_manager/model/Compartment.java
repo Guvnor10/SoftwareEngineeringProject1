@@ -6,10 +6,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-/**
+/** Class
+ * @author gn00021
  * Represents a storage compartment on the ship that can hold stock items.
  * Each compartment has a capacity (in quantity units) and may only
  * store stock that matches its special qualities (StockAttributes).
+ * @version Fall 2025r
  */
 public class Compartment {
 
@@ -22,6 +24,7 @@ public class Compartment {
      * @param capacity        the maximum quantity units this compartment can hold (must be > 0)
      * @param specialQualities the allowed special qualities for stock in this compartment
      */
+    
     public Compartment(int capacity, Set<StockAttributes> specialQualities) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than zero.");
@@ -88,12 +91,10 @@ public class Compartment {
             return false;
         }
 
-        // Check that the compartment's allowed qualities include all of the stock's attributes
         if (!this.specialQualities.containsAll(stock.getAttributes())) {
             return false;
         }
 
-        // Check that there is enough free capacity for the stock's quantity
         return stock.getQuantity() <= this.getFreeSpace();
     }
 
@@ -115,8 +116,6 @@ public class Compartment {
     
     @Override
     public String toString() {
-        // You can format this however you want:
-        // e.g. "Cap:100, Free:40, Qualities:[FLAMMABLE, PERISHABLE]"
         return "Cap:" + this.capacity
             + ", Free:" + this.getFreeSpace()
             + ", Qualities:" + this.specialQualities;
