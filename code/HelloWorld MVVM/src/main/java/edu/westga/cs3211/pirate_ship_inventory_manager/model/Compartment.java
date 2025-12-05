@@ -22,7 +22,7 @@ public class Compartment {
      * Creates a new compartment.
      *
      * @param capacity        the maximum quantity units this compartment can hold (must be > 0)
-     * @param specialQualities the allowed special qualities for stock in this compartment
+     * @param specialQualities the maximum specialQualities this compartment can have must be > 2
      */
     
     public Compartment(int capacity, Set<StockAttributes> specialQualities) {
@@ -31,6 +31,9 @@ public class Compartment {
         }
         if (specialQualities == null) {
             throw new IllegalArgumentException("Special qualities set cannot be null.");
+        }
+        if (specialQualities.size() > 2) {
+            throw new IllegalArgumentException("Compartment can have a maximum of 2 special qualities.");
         }
 
         this.capacity = capacity;
