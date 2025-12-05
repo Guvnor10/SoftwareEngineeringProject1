@@ -81,7 +81,7 @@ public class LoginCodeBehind {
 				this.loadPage("/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
 			} else if (loggedIn.getRole() == Roles.COOK) {
 
-				this.greetingLabel.setText("Cook login successful (page not implemented).");
+				this.loadPage("/edu/westga/cs3211/pirate_ship_inventory_manager/view/CookLandingPage.fxml");
 			}
 		} catch (IOException e0) {
 			this.greetingLabel.setText("Error loading page.");

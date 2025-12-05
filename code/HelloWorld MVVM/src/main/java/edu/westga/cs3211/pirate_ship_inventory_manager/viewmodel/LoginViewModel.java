@@ -2,16 +2,21 @@ package edu.westga.cs3211.pirate_ship_inventory_manager.viewmodel;
 
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
 
-/** Class
- * @author gn00021
- * The Class LoginViewModel.
+/**
+ * Class
+ * 
+ * @author gn00021 The Class LoginViewModel.
  * @version Fall2025
  */
 public class LoginViewModel {
 
+	private LoginViewModel() {
+
+	}
+
 	/** The logged in user name. */
 	private static String loggedInUserName = null;
-	
+
 	/** The logged in role. */
 	private static Roles loggedInRole = null;
 
