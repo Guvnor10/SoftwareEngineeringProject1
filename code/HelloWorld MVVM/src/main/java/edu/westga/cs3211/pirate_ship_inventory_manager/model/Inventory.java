@@ -27,6 +27,8 @@ public class Inventory {
 		this.compartments.add(new Compartment(100, EnumSet.of(StockAttributes.FLAMMABLE)));
 		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.PERISHABLE)));
 		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.LIQUID)));
+		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.LIQUID, StockAttributes.PERISHABLE)));
+		this.compartments.add(new Compartment(200, EnumSet.of(StockAttributes.LIQUID, StockAttributes.FLAMMABLE)));
 		this.compartments.add(new Compartment(300, EnumSet.noneOf(StockAttributes.class)));
 	}
 	

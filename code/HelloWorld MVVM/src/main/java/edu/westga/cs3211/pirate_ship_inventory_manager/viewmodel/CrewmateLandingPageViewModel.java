@@ -11,6 +11,9 @@ import edu.westga.cs3211.pirate_ship_inventory_manager.model.Roles;
  * @version Fall2025
  */
 public class CrewmateLandingPageViewModel {
+	public CrewmateLandingPageViewModel() {
+		
+	}
 
 	/**
 	 * Returns the greeting text to show at the top of the Crewmate landing page.

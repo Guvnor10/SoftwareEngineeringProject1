@@ -1,0 +1,3 @@
+timestamp,itemName,quantity,size,attributes,condition,expirationDate,compartmentCapacity,compartmentQualities,addedBy
+2025-12-05T21:02:09.246986,Water,100,1.0,LIQUID,PERFECT,2029-12-22,200,LIQUID,crewmate1
+2025-12-05T21:04:10.601843600,Gun Powder,10,1.0,FLAMMABLE,USABLE - Limited Stock,2030-12-28,100,FLAMMABLE,quarter1
