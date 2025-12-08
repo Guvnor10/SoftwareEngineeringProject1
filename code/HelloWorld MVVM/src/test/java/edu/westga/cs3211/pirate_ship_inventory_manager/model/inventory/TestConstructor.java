@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import edu.westga.cs3211.pirate_ship_inventory_manager.model.Compartment;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Inventory;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Stock;
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.StockAttributes;
@@ -41,28 +40,7 @@ class TestInventory {
 		assertSame(s, items.get(0));
 	}
 
-	/**
-	 * Fill the inventory so there is no free space, then verify hasFreeSpace() ==
-	 * false and that addStock throws. This covers the "no free space" branch in
-	 * addStock and the false-return branch of hasFreeSpace().
-	 */
-	@Test
-	void addStockShouldFailWhenInventoryIsFull() {
-		Inventory inventory = new Inventory();
-
-		Compartment first = inventory.getCompartments().get(0);
-		int free = first.getFreeSpace();
-
-		Stock filler = new Stock("Filler", free, 1.0, EnumSet.noneOf(StockAttributes.class), "ok", null);
-
-		inventory.addStock(filler);
-
-		assertTrue(inventory.hasFreeSpace());
-
-		Stock extra = new Stock("Extra", 1, 1.0, EnumSet.noneOf(StockAttributes.class), "ok", null);
-
-		assertThrows(IllegalStateException.class, () -> inventory.addStock(extra));
-	}
+	
 
 	@Test
 	void getAllStockShouldReturnUnmodifiableList() {

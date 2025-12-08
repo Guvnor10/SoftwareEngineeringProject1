@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.EnumSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,14 @@ class TestConstructor {
 	void testConstructorRejectsNullSpecialQualities() {
 		assertThrows(IllegalArgumentException.class, () -> new Compartment(50, null));
 	}
+	
+	@Test
+	@DisplayName("Constructor should reject more than two special qualities")
+	void testConstructorRejectsMoreThanTwoSpecialQualities() {
+		Set<StockAttributes> qualities = EnumSet.of(StockAttributes.FLAMMABLE, StockAttributes.LIQUID, StockAttributes.PERISHABLE);
+		assertThrows(IllegalArgumentException.class, () -> new Compartment(50, qualities));
+	}
+
 
 	@Test
 	@DisplayName("canStore returns true when qualities match and space is enough")
