@@ -24,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -91,7 +93,7 @@ public class ViewFoodPageCodeBehind {
 
 	@FXML
 	void backToLandingPage(ActionEvent event) {
-		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
+		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/CookLandingPage.fxml");
 	}
 
 	@FXML
@@ -115,14 +117,31 @@ public class ViewFoodPageCodeBehind {
 	}
 
 	private void configureTableColumns() {
-		this.itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		this.quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		this.sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
-		this.attributesColumn.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getAttributes().toString()));
-		this.conditionColumn.setCellValueFactory(new PropertyValueFactory<>("condition"));
-		this.expirationDateColumn.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
-		this.compartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compartment"));
+		this.itemNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
+		this.quantityColumn
+				.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getQuantity()).asObject());
+		this.sizeColumn
+				.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getSize())));
+		this.attributesColumn
+				.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getAttributes().toString()));
+		this.conditionColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCondition()));
+		this.expirationDateColumn
+				.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getExpirationDate()));
+
+		this.compartmentColumn.setCellValueFactory(cell -> {
+			StockChangeEntry entry = getStockChangeEntryForStock(cell.getValue());
+			return new SimpleStringProperty(entry != null ? entry.getCompartment().toString() : "Unknown");
+		});
+
+		this.timeAddedColumn.setCellValueFactory(cell -> {
+			StockChangeEntry entry = getStockChangeEntryForStock(cell.getValue());
+			return new SimpleObjectProperty<>(entry != null ? entry.getTimestamp() : null);
+		});
+	}
+
+	private StockChangeEntry getStockChangeEntryForStock(Stock stock) {
+		return AddStockChangesPageCodeBehind.CHANGE_LOG.stream().filter(entry -> entry.getStock().equals(stock))
+				.findFirst().orElse(null);
 	}
 
 	@FXML
@@ -177,17 +196,16 @@ public class ViewFoodPageCodeBehind {
 	@FXML
 	void handleRefresh(ActionEvent event) {
 		this.statusLabel.setText("Refreshed.");
-        this.refreshStockList();
+		this.refreshStockList();
 	}
-	
-	 private void refreshStockList() {
-	        List<Stock> updatedStockList = AddStockChangesPageCodeBehind.CHANGE_LOG.stream()
-	                .map(StockChangeEntry::getStock)
-	                .collect(Collectors.toList());
 
-	        this.stockList.setAll(updatedStockList);
-	        this.stockTableView.setItems(stockList);
-	 }
+	private void refreshStockList() {
+		List<Stock> updatedStockList = AddStockChangesPageCodeBehind.CHANGE_LOG.stream().map(StockChangeEntry::getStock)
+				.collect(Collectors.toList());
+
+		this.stockList.setAll(updatedStockList);
+		this.stockTableView.setItems(stockList);
+	}
 
 	@FXML
 	void initialize() {
