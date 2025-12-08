@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import edu.westga.cs3211.pirate_ship_inventory_manager.model.Stock;
+import edu.westga.cs3211.pirate_ship_inventory_manager.model.StockChangeEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 public class ViewFoodPageCodeBehind {
@@ -81,7 +86,9 @@ public class ViewFoodPageCodeBehind {
 
 	@FXML
 	private TableColumn<Stock, LocalDateTime> timeAddedColumn;
-	
+
+	private ObservableList<Stock> stockList = FXCollections.observableArrayList();
+
 	@FXML
 	void backToLandingPage(ActionEvent event) {
 		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
@@ -91,51 +98,102 @@ public class ViewFoodPageCodeBehind {
 	void backToLoginPage(ActionEvent event) {
 		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml");
 	}
-	
+
 	private void switchScene(ActionEvent event, String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            if (this.statusLabel != null) {
-                this.statusLabel.setText("Unable to load page: " + fxmlPath);
-            }
-        }
-    }
-	
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+			Parent root = loader.load();
+			Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+			stage.setScene(new Scene(root));
+			stage.show();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			if (this.statusLabel != null) {
+				this.statusLabel.setText("Unable to load page: " + fxmlPath);
+			}
+		}
+	}
+
 	private void configureTableColumns() {
-	    this.itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-	    this.quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-	    this.sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
-	    this.attributesColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAttributes().toString()));
-	    this.conditionColumn.setCellValueFactory(new PropertyValueFactory<>("condition"));
-	    this.expirationDateColumn.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
-	    this.compartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compartment"));
+		this.itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		this.quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		this.sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
+		this.attributesColumn.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getAttributes().toString()));
+		this.conditionColumn.setCellValueFactory(new PropertyValueFactory<>("condition"));
+		this.expirationDateColumn.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
+		this.compartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compartment"));
 	}
 
 	@FXML
 	void handleApplyFilters(ActionEvent event) {
+		List<Stock> filteredStock = stockList.stream().filter(stock -> filterByAttributes(stock))
+				.filter(stock -> filterByDate(stock)).collect(Collectors.toList());
 
+		this.stockTableView.setItems(FXCollections.observableArrayList(filteredStock));
+		this.statusLabel.setText("Filters applied.");
+	}
+
+	private boolean filterByAttributes(Stock stock) {
+		boolean matchesFilters = true;
+		if (flammableFilterCheckBox.isSelected()) {
+			matchesFilters &= stock.isFlammable();
+		}
+		if (perishableFilterCheckBox.isSelected()) {
+			matchesFilters &= stock.isPerishable();
+		}
+		if (liquidFilterCheckBox.isSelected()) {
+			matchesFilters &= stock.isLiquid();
+		}
+		return matchesFilters;
+	}
+
+	private boolean filterByDate(Stock stock) {
+		LocalDate startDate = startDatePicker.getValue();
+		LocalDate endDate = endDatePicker.getValue();
+		LocalDate expirationDate = stock.getExpirationDate();
+
+		if (startDate != null && expirationDate.isBefore(startDate)) {
+			return false;
+		}
+		if (endDate != null && expirationDate.isAfter(endDate)) {
+			return false;
+		}
+		return true;
 	}
 
 	@FXML
 	void handleClearFilters(ActionEvent event) {
+		this.flammableFilterCheckBox.setSelected(false);
+		this.perishableFilterCheckBox.setSelected(false);
+		this.liquidFilterCheckBox.setSelected(false);
+		this.startDatePicker.setValue(null);
+		this.endDatePicker.setValue(null);
+		this.statusLabel.setText("");
 
+		this.stockTableView.setItems(stockList);
 	}
 
 	@FXML
 	void handleRefresh(ActionEvent event) {
-
+		this.statusLabel.setText("Refreshed.");
+        this.refreshStockList();
 	}
+	
+	 private void refreshStockList() {
+	        List<Stock> updatedStockList = AddStockChangesPageCodeBehind.CHANGE_LOG.stream()
+	                .map(StockChangeEntry::getStock)
+	                .collect(Collectors.toList());
+
+	        this.stockList.setAll(updatedStockList);
+	        this.stockTableView.setItems(stockList);
+	 }
 
 	@FXML
 	void initialize() {
-		 configureTableColumns();
-		
+		configureTableColumns();
+		this.refreshStockList();
+
 		assert attributesColumn != null
 				: "fx:id=\"attributesColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
 		assert compartmentColumn != null
