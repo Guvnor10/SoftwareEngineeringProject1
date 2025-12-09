@@ -117,6 +117,37 @@ public class Compartment {
         this.stockItems.add(stock);
     }
     
+    /**
+     * Adds the given stock to this compartment.
+     * @param target target of stock
+     * @throws IllegalArgumentException if the stock cannot be stored here
+     * @return stock
+     */
+    public boolean removeStock(Stock target) {
+        if (target == null) {
+            throw new IllegalArgumentException("stock cannot be null");
+        }
+
+        for (int i = 0; i < this.stockItems.size(); i++) {
+            Stock current = this.stockItems.get(i);
+
+            boolean sameName = current.getName().equals(target.getName());
+            boolean sameQty = current.getQuantity() == target.getQuantity();
+            boolean sameSize = Double.compare(current.getSize(), target.getSize()) == 0;
+            boolean sameAttrs = current.getAttributes().equals(target.getAttributes());
+            boolean sameCond = current.getCondition().equals(target.getCondition());
+            boolean sameExp = java.util.Objects.equals(
+                    current.getExpirationDate(), target.getExpirationDate());
+
+            if (sameName && sameQty && sameSize && sameAttrs && sameCond && sameExp) {
+                this.stockItems.remove(i);
+                return true;
+            }
+        }
+
+        return false; 
+    }
+
     @Override
     public String toString() {
         return "Cap:" + this.capacity
