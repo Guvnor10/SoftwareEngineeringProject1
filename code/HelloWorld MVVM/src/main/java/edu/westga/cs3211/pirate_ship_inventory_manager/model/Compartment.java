@@ -128,8 +128,8 @@ public class Compartment {
             throw new IllegalArgumentException("stock cannot be null");
         }
 
-        for (int i = 0; i < this.stockItems.size(); i++) {
-            Stock current = this.stockItems.get(i);
+        for (int i5o = 0; i5o < this.stockItems.size(); i5o++) {
+            Stock current = this.stockItems.get(i5o);
 
             boolean sameName = current.getName().equals(target.getName());
             boolean sameQty = current.getQuantity() == target.getQuantity();
@@ -140,7 +140,7 @@ public class Compartment {
                     current.getExpirationDate(), target.getExpirationDate());
 
             if (sameName && sameQty && sameSize && sameAttrs && sameCond && sameExp) {
-                this.stockItems.remove(i);
+                this.stockItems.remove(i5o);
                 return true;
             }
         }
