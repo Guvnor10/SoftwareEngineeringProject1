@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.EnumSet;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -40,15 +41,19 @@ class TestInventoryParameterized {
    
 
     @ParameterizedTest
-    @ValueSource(ints = { 4 })  
+    @ValueSource(ints = { 6 })  
     @DisplayName("getCompartments returns correct number and is unmodifiable")
     void testGetCompartments(int expectedSize) {
         Inventory inv = new Inventory();
+
+        // Correct compartment count
         assertEquals(expectedSize, inv.getCompartments().size());
 
+        // Must throw when modifying
         assertThrows(UnsupportedOperationException.class,
             () -> inv.getCompartments().clear());
     }
+
 
     @ParameterizedTest
     @ValueSource(strings = { "shared" })
@@ -150,17 +155,42 @@ class TestInventoryParameterized {
         assertTrue(inv.hasFreeSpace());
     }
 
+    @Test
+    @DisplayName("hasFreeSpace returns true on new inventory")
+    void testHasFreeSpaceTrueForNewInventory() {
+        Inventory inv = new Inventory();
+        assertTrue(inv.hasFreeSpace());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = { "fill everything" })
     @DisplayName("hasFreeSpace returns false when all compartments are full")
-    void testHasFreeSpaceFalse(String ignore) {
+    void testHasFreeSpaceFalseWhenAllFull(String ignore) {
         Inventory inv = new Inventory();
 
-        
-        inv.getCompartments().get(0).addStock(makeStock("A", 100, 1, StockAttributes.FLAMMABLE));
-        inv.getCompartments().get(1).addStock(makeStock("B", 200, 1, StockAttributes.PERISHABLE));
-        inv.getCompartments().get(2).addStock(makeStock("C", 200, 1, StockAttributes.LIQUID));
-        inv.getCompartments().get(3).addStock(makeGenericStock("D", 300));
+        // 0: 100, FLAMMABLE
+        inv.getCompartments().get(0)
+            .addStock(makeStock("A", 100, 1, StockAttributes.FLAMMABLE));
+
+        // 1: 200, PERISHABLE
+        inv.getCompartments().get(1)
+            .addStock(makeStock("B", 200, 1, StockAttributes.PERISHABLE));
+
+        // 2: 200, LIQUID
+        inv.getCompartments().get(2)
+            .addStock(makeStock("C", 200, 1, StockAttributes.LIQUID));
+
+        // 3: 200, LIQUID + PERISHABLE
+        inv.getCompartments().get(3)
+            .addStock(makeStock("D", 200, 1, StockAttributes.LIQUID));
+
+        // 4: 200, LIQUID + FLAMMABLE
+        inv.getCompartments().get(4)
+            .addStock(makeStock("E", 200, 1, StockAttributes.LIQUID));
+
+        // 5: 300, NONE
+        inv.getCompartments().get(5)
+            .addStock(makeGenericStock("F", 300));
 
         assertFalse(inv.hasFreeSpace());
     }
