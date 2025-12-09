@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?xml-model href="ViewStockChangesPage.fxml"?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="983.0" prefWidth="1176.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3211.pirate_ship_inventory_manager.view.ViewStockChangesPageCodeBehind">
 
 	<children>
@@ -76,6 +76,7 @@
 		<Button layoutX="844.0" layoutY="599.0" onAction="#handleClearFilters" prefHeight="51.0" prefWidth="132.0" text="Clear Filters" />
 
 		<Button layoutX="1003.0" layoutY="599.0" onAction="#handleRefresh" prefHeight="51.0" prefWidth="132.0" text="Refresh" />
+      <Button fx:id="removeStockButton" layoutX="844.0" layoutY="677.0" onAction="#handleRemoveStock" prefHeight="51.0" prefWidth="132.0" text="Remove Selected" />
 
 	</children>
 </AnchorPane>

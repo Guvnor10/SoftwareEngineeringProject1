@@ -1,4 +1,5 @@
 package edu.westga.cs3211.pirate_ship_inventory_manager.view;
+
 import java.io.IOException;
 
 /**
@@ -15,37 +16,57 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * The Class CookLandingPageCodeBehind.
+ * @version Fall 25
+ * @author gn00021
+ */
 public class CookLandingPageCodeBehind {
 
-    @FXML
-    private Button addStockButton;
+	/** The add stock button. */
+	@FXML
+	private Button addStockButton;
 
-    @FXML
-    private Label greetingLabel;
+	/** The greeting label. */
+	@FXML
+	private Label greetingLabel;
 
-    @FXML
-    private Button logoutButton;
+	/** The logout button. */
+	@FXML
+	private Button logoutButton;
 
-    @FXML
-    void backToLoginPage(ActionEvent event) throws IOException {
-    	Stage stage = (Stage) this.logoutButton.getScene().getWindow();
+	/**
+	 * Back to login page.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@FXML
+	void backToLoginPage(ActionEvent event) throws IOException {
+		Stage stage = (Stage) this.logoutButton.getScene().getWindow();
 
 		Parent root = FXMLLoader
 				.load(getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml"));
 
 		stage.setScene(new Scene(root));
 		stage.show();
-    }
+	}
 
-    @FXML
-    void viewFood(ActionEvent event) throws IOException {
-    	Stage stage = (Stage) this.logoutButton.getScene().getWindow();
+	/**
+	 * View food.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@FXML
+	void viewFood(ActionEvent event) throws IOException {
+		Stage stage = (Stage) this.logoutButton.getScene().getWindow();
 
-		Parent root = FXMLLoader
-				.load(getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/ViewFoodPage.fxml"));
+		Parent root = FXMLLoader.load(
+				getClass().getResource("/edu/westga/cs3211/pirate_ship_inventory_manager/view/ViewFoodPage.fxml"));
 
 		stage.setScene(new Scene(root));
 		stage.show();
-    }
+	}
 
 }

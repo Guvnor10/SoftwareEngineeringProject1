@@ -23,75 +23,115 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
 
+/** class
+ * The Class ViewFoodPageCodeBehind.
+ * @version f25
+ * @author gn00021
+ */
 public class ViewFoodPageCodeBehind {
 
+	/** The resources. */
 	@FXML
 	private ResourceBundle resources;
 
+	/** The location. */
 	@FXML
 	private URL location;
 
+	/** The attributes column. */
 	@FXML
 	private TableColumn<Stock, String> attributesColumn;
 
+	/** The compartment column. */
 	@FXML
 	private TableColumn<Stock, String> compartmentColumn;
 
+	/** The condition column. */
 	@FXML
 	private TableColumn<Stock, String> conditionColumn;
 
+	/** The end date picker. */
 	@FXML
 	private DatePicker endDatePicker;
 
+	/** The expiration date column. */
 	@FXML
 	private TableColumn<Stock, LocalDate> expirationDateColumn;
 
+	/** The flammable filter check box. */
 	@FXML
 	private CheckBox flammableFilterCheckBox;
 
+	/** The home button. */
 	@FXML
 	private Button homeButton;
 
+	/** The item name column. */
 	@FXML
 	private TableColumn<Stock, String> itemNameColumn;
 
+	/** The liquid filter check box. */
 	@FXML
 	private CheckBox liquidFilterCheckBox;
 
+	/** The logout button. */
 	@FXML
 	private Button logoutButton;
 
+	/** The perishable filter check box. */
 	@FXML
 	private CheckBox perishableFilterCheckBox;
 
+	/** The quantity column. */
 	@FXML
 	private TableColumn<Stock, Integer> quantityColumn;
 
+	/** The size column. */
 	@FXML
 	private TableColumn<Stock, String> sizeColumn;
 
+	/** The start date picker. */
 	@FXML
 	private DatePicker startDatePicker;
 
+	/** The status label. */
 	@FXML
 	private Label statusLabel;
 
+	/** The stock table view. */
 	@FXML
 	private TableView<Stock> stockTableView;
 
+	/** The time added column. */
 	@FXML
 	private TableColumn<Stock, LocalDateTime> timeAddedColumn;
 	
+	/**
+	 * Back to landing page.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void backToLandingPage(ActionEvent event) {
-		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
+		this.switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/QuarterMasterLandingPage.fxml");
 	}
 
+	/**
+	 * Back to login page.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void backToLoginPage(ActionEvent event) {
-		switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml");
+		this.switchScene(event, "/edu/westga/cs3211/pirate_ship_inventory_manager/view/LoginPage.fxml");
 	}
 	
+	/**
+	 * Switch scene.
+	 *
+	 * @param event the event
+	 * @param fxmlPath the fxml path
+	 */
 	private void switchScene(ActionEvent event, String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -107,6 +147,9 @@ public class ViewFoodPageCodeBehind {
         }
     }
 	
+	/**
+	 * Configure table columns.
+	 */
 	private void configureTableColumns() {
 	    this.itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 	    this.quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -117,56 +160,74 @@ public class ViewFoodPageCodeBehind {
 	    this.compartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compartment"));
 	}
 
+	/**
+	 * Handle apply filters.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void handleApplyFilters(ActionEvent event) {
 
 	}
 
+	/**
+	 * Handle clear filters.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void handleClearFilters(ActionEvent event) {
 
 	}
 
+	/**
+	 * Handle refresh.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void handleRefresh(ActionEvent event) {
 
 	}
 
+	/**
+	 * Initialize.
+	 */
 	@FXML
 	void initialize() {
-		 configureTableColumns();
+		 this.configureTableColumns();
 		
-		assert attributesColumn != null
+		assert this.attributesColumn != null
 				: "fx:id=\"attributesColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert compartmentColumn != null
+		assert this.compartmentColumn != null
 				: "fx:id=\"compartmentColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert conditionColumn != null
+		assert this.conditionColumn != null
 				: "fx:id=\"conditionColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert endDatePicker != null
+		assert this.endDatePicker != null
 				: "fx:id=\"endDatePicker\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert expirationDateColumn != null
+		assert this.expirationDateColumn != null
 				: "fx:id=\"expirationDateColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert flammableFilterCheckBox != null
+		assert this.flammableFilterCheckBox != null
 				: "fx:id=\"flammableFilterCheckBox\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert itemNameColumn != null
+		assert this.homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
+		assert this.itemNameColumn != null
 				: "fx:id=\"itemNameColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert liquidFilterCheckBox != null
+		assert this.liquidFilterCheckBox != null
 				: "fx:id=\"liquidFilterCheckBox\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert logoutButton != null
+		assert this.logoutButton != null
 				: "fx:id=\"logoutButton\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert perishableFilterCheckBox != null
+		assert this.perishableFilterCheckBox != null
 				: "fx:id=\"perishableFilterCheckBox\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert quantityColumn != null
+		assert this.quantityColumn != null
 				: "fx:id=\"quantityColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert sizeColumn != null : "fx:id=\"sizeColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert startDatePicker != null
+		assert this.sizeColumn != null : "fx:id=\"sizeColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
+		assert this.startDatePicker != null
 				: "fx:id=\"startDatePicker\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert statusLabel != null
+		assert this.statusLabel != null
 				: "fx:id=\"statusLabel\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert stockTableView != null
+		assert this.stockTableView != null
 				: "fx:id=\"stockTableView\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
-		assert timeAddedColumn != null
+		assert this.timeAddedColumn != null
 				: "fx:id=\"timeAddedColumn\" was not injected: check your FXML file 'ViewFoodPage.fxml'.";
 
 	}
